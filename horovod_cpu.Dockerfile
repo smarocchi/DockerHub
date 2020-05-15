@@ -11,7 +11,7 @@ ARG python=2.7
 ENV PYTHON_VERSION=${python}
 
 # Set default shell to /bin/bash
-SHELL ["/bin/bash", "-cu"]
+CMD ["/bin/bash", "-cu"]
 
 RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
         build-essential \
@@ -28,7 +28,43 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
         python${PYTHON_VERSION}-dev \
         librdmacm1 \
         libibverbs1 \
-        ibverbs-providers
+        ibverbs-providers \
+        bzip2 \
+        gzip \
+        tar \
+        zip \
+        unzip \
+        xz \
+        patch \
+        make \ 
+        file \
+        which \
+        gcc-c++ \
+        perl-Data-Dumper \
+        perl-Thread-Queue \
+        boost-devel \
+        openssl \
+        libibverbs-dev \ 
+        libibverbs-devel \
+        rdma-core-devel \
+        openssl-devel \
+        libssl-dev \
+        libopenssl-devel \
+        binutils \
+        dapl \
+        dapl-utils \
+        ibacm \
+        infiniband-diags \
+        libibverbs \
+        libibverbs-utils \
+        libmlx4 \
+        librdmacm \
+        librdmacm-utils \
+        mstflint \
+        opensm-libs \
+        perftest \
+        qperf \
+        rdma
 
 RUN if [[ "${PYTHON_VERSION}" == "3.6" ]]; then \
         apt-get install -y python${PYTHON_VERSION}-distutils; \
