@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
         make \ 
         file \
         g++ \
-        data-dumper \
+        libdata-dumper-simple-perl \
         libthread-queue-any-perl \
         libboost-dev \
         openssl \
