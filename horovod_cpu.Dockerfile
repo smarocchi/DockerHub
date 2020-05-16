@@ -34,37 +34,30 @@ RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-
         tar \
         zip \
         unzip \
-        xz \
+        xz-utils \
         patch \
         make \ 
         file \
-        which \
-        gcc-c++ \
-        perl-Data-Dumper \
-        perl-Thread-Queue \
-        boost-devel \
+        g++ \
+        data-dumper \
+        libthread-queue-any-perl \
+        libboost-dev \
         openssl \
         libibverbs-dev \ 
-        libibverbs-devel \
-        rdma-core-devel \
-        openssl-devel \
         libssl-dev \
-        libopenssl-devel \
         binutils \
-        dapl \
-        dapl-utils \
+        dapl2-utils \
         ibacm \
         infiniband-diags \
-        libibverbs \
-        libibverbs-utils \
-        libmlx4 \
-        librdmacm \
-        librdmacm-utils \
+        ibverbs-utils \
+        libmlx4-1 \
+        librdmacm1 \
+        rdmacm-utils \
         mstflint \
-        opensm-libs \
+        opensm \
         perftest \
         qperf \
-        rdma
+        rdma-core
 
 RUN if [[ "${PYTHON_VERSION}" == "3.6" ]]; then \
         apt-get install -y python${PYTHON_VERSION}-distutils; \
