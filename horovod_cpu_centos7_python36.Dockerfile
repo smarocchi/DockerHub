@@ -97,7 +97,17 @@ RUN mkdir /tmp/openmpi && \
     rm -rf /tmp/openmpi
 
 # Install Horovod
-RUN HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 \
-    pip3 install --no-cache-dir horovod
+#RUN HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 \
+#    pip3 install --no-cache-dir horovod
+
+# download and install horovod
+RUN cd /tmp && \
+    git clone https://github.com/horovod/horovod.git --recursive && \
+    cd horovod 
+
+RUN cd /tmp/horovod && \
+    git checkout tags/v0.19.2 && \
+    python3 setup.py sdist && \
+    HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 pip3 install --no-cache-dir dist/horovod-*.tar.gz
 
 WORKDIR "/examples"
