@@ -38,7 +38,7 @@ RUN yum -y groupinstall "Development tools" && \
                    perl-Thread-Queue \
                    boost-devel \
                    openssl && \
-    yum --skip-broken --quiet --assumeyes install libibverbs-dev \
+                                  yum  -y install libibverbs-dev \
                                                   libibverbs-devel \
                                                   rdma-core-devel \
                                                   openssl-devel \
@@ -67,10 +67,8 @@ RUN yum -y groupinstall "Development tools" && \
     svn checkout https://github.com/horovod/horovod/trunk/examples && \
     rm -rf /examples/.svn && mkdir -p /var/run/sshd                                                                                                    
 
-RUN ln -s /usr/bin/python${PYTHON_VERSION} /usr/bin/python
-
 # upgrade pip with pip
-RUN pip3 install --upgrade pip  \
+RUN pip3 install --upgrade pip 
 
 # Allow OpenSSH to talk to containers without asking for confirmation
 RUN cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
