@@ -1,4 +1,5 @@
-FROM centos:centos7
+FROM centos:centos7.4.1708 
+
 
 # Python
 
@@ -15,7 +16,7 @@ ENV PYTHON_VERSION=${python}
 CMD ["/bin/bash", "-cu"]
 
 RUN yum -y groupinstall "Development tools" && \
-    yum install -y epel-release \
+    yum -y install epel-release \
                    python \
                    python-pip \
                    bzip2 \ 
@@ -30,6 +31,7 @@ RUN yum -y groupinstall "Development tools" && \
                    patch \
                    make \
                    cmake \
+                   automake \  
                    file \
                    git \
                    which \
@@ -63,9 +65,10 @@ RUN yum -y groupinstall "Development tools" && \
                                                   libpng-devel \
                                                   openssh-clients \ 
                                                   openssh-server \
-                                                  subversion && \
-    svn checkout https://github.com/horovod/horovod/trunk/examples && \
-    rm -rf /examples/.svn && mkdir -p /var/run/sshd                                                                                                    
+                                                  subversion
+
+RUN mkdir -p /var/run/sshd                                                                                                    
+RUN yum -y install python-pip 
 
 # upgrade pip with pip
 RUN pip install --upgrade pip 
@@ -74,15 +77,6 @@ RUN pip install --upgrade pip
 RUN cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
     mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
-
-# Install TensorFlow, Keras, PyTorch and MXNet
-RUN pip install future typing
-RUN pip install numpy \
-        tensorflow==${TENSORFLOW_VERSION} \
-        keras \
-        h5py
-RUN pip install torch==${PYTORCH_VERSION} torchvision==${TORCHVISION_VERSION}
-RUN pip install mxnet==${MXNET_VERSION}
 
 # Install Open MPI
 RUN mkdir /tmp/openmpi && \
@@ -96,18 +90,30 @@ RUN mkdir /tmp/openmpi && \
     ldconfig && \
     rm -rf /tmp/openmpi
 
+# Install TensorFlow, Keras, PyTorch and MXNet
+RUN pip install future typing
+RUN pip install numpy \
+        tensorflow==${TENSORFLOW_VERSION} \
+        keras \
+        h5py
+RUN pip install torch==${PYTORCH_VERSION} torchvision==${TORCHVISION_VERSION}
+RUN pip install mxnet==${MXNET_VERSION}
+
+RUN yum -y install libffi libffi-devel
+RUN yum -y install python-devel
+
 # Install Horovod
-#RUN HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 \
-#    pip install --no-cache-dir horovod
+RUN HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 \
+    pip install --no-cache-dir horovod==0.18.2
 
 # download and install horovod
-RUN cd /tmp && \
-    git clone https://github.com/horovod/horovod.git --recursive && \
-    cd horovod 
+#RUN cd /tmp && \
+#    git clone https://github.com/horovod/horovod.git --recursive && \
+#    cd horovod 
 
-RUN cd /tmp/horovod && \
-    git checkout tags/v0.18.2 && \
-    python setup.py sdist && \
-    HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 pip install --no-cache-dir dist/horovod-*.tar.gz
+#RUN cd /tmp/horovod && \
+#    git checkout tags/v0.18.2 && \
+#    python setup.py sdist && \
+#    HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 pip install --no-cache-dir dist/horovod-*.tar.gz
 
 WORKDIR "/examples"
