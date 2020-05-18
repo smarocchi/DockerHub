@@ -117,9 +117,9 @@ RUN mkdir -p /var/run/sshd && \
    pip3 install --upgrade pip 
 
 # Allow OpenSSH to talk to containers without asking for confirmation
-RUN cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+#RUN cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
+#    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
+#    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
 # Install Open MPI
 RUN mkdir /tmp/openmpi && \
