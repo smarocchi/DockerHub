@@ -133,7 +133,7 @@ RUN mkdir /tmp/openmpi && \
     ldconfig && \
     rm -rf /tmp/openmpi
 
-ENV TENSORFLOW_VERSION=2.0.0
+ENV TENSORFLOW_VERSION=1.14.0
 
 # Install TensorFlow, Keras, PyTorch and MXNet
 RUN pip3 install future typing
@@ -144,14 +144,18 @@ RUN pip3 install numpy \
 RUN pip3 install torch==${PYTORCH_VERSION} torchvision==${TORCHVISION_VERSION}
 RUN pip3 install mxnet==${MXNET_VERSION}
 
+ENV HOROVOD_VERSION=0.18.1
+
 # Install Horovod
-#RUN HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 \
-#    pip3 install --no-cache-dir horovod==${HOROVOD_VERSION}
+RUN HOROVOD_WITH_TENSORFLOW=1 HOROVOD_WITH_PYTORCH=1 HOROVOD_WITH_MXNET=1 \
+    pip3 install --no-cache-dir horovod==${HOROVOD_VERSION}
+
+# --no-cache-dir
 
 # download and install horovod
-RUN cd /tmp && \
-    git clone https://github.com/horovod/horovod.git --recursive && \
-    cd horovod 
+#RUN cd /tmp && \
+#    git clone https://github.com/horovod/horovod.git --recursive && \
+#    cd horovod 
 
 #RUN cd /tmp/horovod && \
 #    git checkout tags/v0.18.2 && \
