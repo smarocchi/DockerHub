@@ -133,11 +133,16 @@ RUN mkdir /tmp/openmpi && \
     wget https://www.open-mpi.org/software/ompi/v4.0/downloads/openmpi-4.0.0.tar.gz && \
     tar zxf openmpi-4.0.0.tar.gz && \
     cd openmpi-4.0.0 && \
-    ./configure --disable-getpwuid --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen --enable-wrapper-rpath=no --enable-wrapper-runpath=no  && \
+    ./configure --prefix=/opt/openmpi --disable-getpwuid --with-psm2=yes --with-memory-manager=none  --enable-static=yes --with-pmix --enable-shared --with-verbs --enable-mpirun-prefix-by-default --disable-dlopen --enable-wrapper-rpath=no --enable-wrapper-runpath=no  && \
     make -j $(nproc) all && \
     make install && \
     ldconfig && \
     rm -rf /tmp/openmpi
+
+
+ENV PATH=/opt/openmpi/bin:${PATH}
+ENV LD_LIBRARY_PATH=/opt/openmpi/lib:${LD_LIBRARY_PATH}
+
 
 # I avoid to use --with-mpi because I lack the correct libraries
 
